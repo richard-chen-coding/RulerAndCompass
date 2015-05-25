@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.rich.edu.rulerandcompass.geo.GeoEntity;
 import com.rich.edu.rulerandcompass.geo.Segment;
+import com.rich.edu.rulerandcompass.geo.Util;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -26,7 +27,6 @@ public class PaintView  extends View
     		if(curEntity != null)
     		{
     			e.CalcIntersection(curEntity);
-
     		}
     	}
     	
@@ -132,6 +132,7 @@ public class PaintView  extends View
     {
         setFocusable(true);
 
+        Util.Init();
         _paint.setAntiAlias(true);
         _paint.setColor(Color.RED);
         _paint.setStrokeWidth(1);
@@ -143,8 +144,7 @@ public class PaintView  extends View
 
     private float _preX;
     private float _preY;
-    private float neastJoinX;
-    private float neastJoinY;
+
     
     private ArrayList<GeoEntity> drewEntities = new ArrayList<GeoEntity>();
     private GeoEntity curEntity = null;

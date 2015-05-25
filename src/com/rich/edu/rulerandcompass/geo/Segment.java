@@ -1,5 +1,8 @@
 package com.rich.edu.rulerandcompass.geo;
 
+import com.rich.edu.rulerandcompass.algo.Edge;
+import com.rich.edu.rulerandcompass.algo.Graph;
+
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
@@ -19,7 +22,7 @@ public class Segment  extends LineBase
 	@Override
 	public void CalcIntersection(GeoEntity entity) 
 	{
-		super.CalcIntersection(entity);
+		super.RemoveIntersections(entity);
 		
 		if(entity instanceof Segment)
 		{
@@ -27,9 +30,8 @@ public class Segment  extends LineBase
 			Point2D pt = Util.get_line_intersection(Start().X, Start().Y, End().X, End().Y, line.Start().X, line.Start().Y, line.End().X, line.End().Y);
 			if(pt != null)
 			{
-				Intersection insPt = new Intersection(pt, this, entity);
-				this.IntersectionPoints.add(insPt);
-				entity.IntersectionPoints.add(insPt);
+				Edge edge = new Edge(this, entity, new Point2D[]{pt});
+				Graph.GetGraph().AddEdge(edge);
 			}
 		}
 		else
@@ -41,8 +43,8 @@ public class Segment  extends LineBase
 	@Override
 	public void DrawFinalHintPoints(Canvas canvas, Paint paint) 
 	{
-		super.DrawHintPoint(_start.X, _start.Y, canvas);
-		super.DrawHintPoint(_end.X, _end.Y, canvas);
+		Util.DrawHintPoint(canvas, _start);
+		Util.DrawHintPoint(canvas, _end);
 	}
 	
 	@Override

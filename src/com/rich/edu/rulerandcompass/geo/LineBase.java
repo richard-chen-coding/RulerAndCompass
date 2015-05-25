@@ -43,8 +43,8 @@ public abstract class LineBase extends GeoEntity
 	@Override
 	public void DrawMovingHintPoints(Canvas canvas, Paint paint) 
 	{
-		super.DrawHintPoint(_start.X, _start.Y, canvas);
-		super.DrawHintPoint(_end.X, _end.Y, canvas);
+		Util.DrawHintPoint(canvas, _start);
+		Util.DrawHintPoint(canvas, _end);
 	}
 	
 	protected float _slope;

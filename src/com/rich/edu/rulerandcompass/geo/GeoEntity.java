@@ -1,10 +1,11 @@
 package com.rich.edu.rulerandcompass.geo;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Iterator;
+
+import com.rich.edu.rulerandcompass.algo.Edge;
+import com.rich.edu.rulerandcompass.algo.Graph;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 
 public abstract class GeoEntity 
@@ -19,7 +20,6 @@ public abstract class GeoEntity
 		_end = end;
 		_cid++;
 		_id = _cid;
-		IntersectionPoints = new ArrayList<Intersection>();
 	}
 	
 	public GeoEntity(float start_x, float start_y, float end_x, float end_y)
@@ -27,59 +27,55 @@ public abstract class GeoEntity
 		this(new Point2D(start_x, start_y), new Point2D(end_x, end_y));
 	}
 	
+	
+	protected final void DrawIntersectionPoints(Canvas canvas)
 	{
-		_hintRadius = 3;
-		_hintPaint = new Paint();
-		_hintPaint.setAntiAlias(true);
-		_hintPaint.setColor(Color.GREEN);
-		_hintPaint.setStrokeWidth(1);
-		_hintPaint.setStyle(Paint.Style.STROKE);
+		Graph graph = Graph.GetGraph();
+		Iterator<Edge> edges = graph.FindEdges(this);
+        while(edges.hasNext())
+        {  
+        	Edge edge = edges.next();  
+        	for(Point2D pt : edge.IntersectionPoints)
+        	{
+        		Util.DrawIntersectionPoint(canvas, pt);
+        	}
+        }
 	}
 	
 	public void Draw(Canvas canvas, Paint paint)
 	{
-		for(Intersection ins : IntersectionPoints)
-		{
-			ins.DrawIntersectionPoint(canvas);
-		}
+		DrawIntersectionPoints(canvas);
 
 		DrawHintPoints(canvas, paint);
 	}
 	
 
-	
-	public void CalcIntersection(GeoEntity entity)
+	protected final void RemoveIntersections(GeoEntity entity)
 	{
-		for(Intersection ins : IntersectionPoints)
-		{
-			if(ins.EntityA.Id() == this.Id() && ins.EntityB.Id() == entity.Id() || ins.EntityA.Id() == entity.Id() && ins.EntityB.Id() == this.Id())
-			{
-				
-				
-				IntersectionPoints.remove(ins);
-			}
-		}
-		
-		
+		Graph graph = Graph.GetGraph();
+		Iterator<Edge> inEdges = graph.FindInEdges(this);
+        while(inEdges.hasNext())
+        {  
+        	Edge edge = inEdges.next();  
+        	if(edge.Target().Id() == entity.Id())
+        	{
+        		graph.RemoveEdge(edge);
+        	}
+        }
 
-		try
-		{
-			for(Intersection ins : entity.IntersectionPoints)
-			{
-				if(ins.EntityA.Id() == this.Id() && ins.EntityB.Id() == entity.Id() || ins.EntityA.Id() == entity.Id() && ins.EntityB.Id() == this.Id())
-				{
-					
-					entity.IntersectionPoints.remove(ins);
-				}
-			}
-		}
-		catch(java.util.ConcurrentModificationException ex)
-		{	
-		
-		}
-		
-
+		Iterator<Edge> outEdges = Graph.GetGraph().FindOutEdges(this);
+        while(outEdges.hasNext())
+        {  
+        	Edge edge = outEdges.next();  
+        	if(edge.Source().Id() == entity.Id())
+        	{
+        		graph.RemoveEdge(edge);
+        	}
+        }
 	}
+	
+	public abstract void CalcIntersection(GeoEntity entity);
+
 
 	
 	public void Reset(float new_start_x, float new_start_y, float new_end_x, float new_end_y)
@@ -116,10 +112,7 @@ public abstract class GeoEntity
 	
 
 		
-	protected final void DrawHintPoint(float x, float y, Canvas canvas)
-	{
-		canvas.drawCircle(x, y, _hintRadius, _hintPaint);
-	}
+
 	
 	private void DrawHintPoints(Canvas canvas, Paint paint)
 	{
@@ -135,11 +128,10 @@ public abstract class GeoEntity
 		
 	protected Point2D _start;
 	protected Point2D _end;
-	private static Paint _hintPaint;
 	protected static int _cid = 0;
 	protected int _id;	
-	protected static int _hintRadius;
-	public List<Intersection> IntersectionPoints;
+
+	
 	public MovingStatus Status;
 	
 	@SuppressWarnings("unused")
