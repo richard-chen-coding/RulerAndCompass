@@ -113,21 +113,36 @@ public class Graph
 
 	public void RemoveEdges(GeoEntity vertex1, GeoEntity vertex2)
 	{
-		Iterator<Edge> inEdges = FindInEdges(vertex1);
+		 if(vertex1 == null || vertex2 == null)
+		 {
+			 throw new IllegalArgumentException("Can not find an edge with null Vertex");
+		 }
+		
+		 if(vertex1.Id() == vertex2.Id())
+		 {
+			 throw new IllegalArgumentException("Can not find an edge with two identical entities"); 
+		 }
+		 
+		 Edge tmpEdge = new Edge(vertex1, vertex2);
+		 GeoEntity source = tmpEdge.Source();
+		 GeoEntity target = tmpEdge.Target();
+
+		 
+		Iterator<Edge> inEdges = FindInEdges(source);
         while(inEdges.hasNext())
         {  
         	Edge edge = inEdges.next();  
-        	if(edge.Target().equals(vertex2))
+        	if(edge.Target().equals(target))
         	{
         		RemoveEdge(edge);
         	}
         }
 
-		Iterator<Edge> outEdges = FindOutEdges(vertex1);
+		Iterator<Edge> outEdges = FindOutEdges(target);
         while(outEdges.hasNext())
         {  
         	Edge edge = outEdges.next();  
-        	if(edge.Source().Id() == vertex2.Id())
+        	if(edge.Source().equals(source))
         	{
         		RemoveEdge(edge);
         	}
