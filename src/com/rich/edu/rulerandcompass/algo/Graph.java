@@ -109,7 +109,30 @@ public class Graph
 	}
 
 
+	
 
+	public void RemoveEdges(GeoEntity vertex1, GeoEntity vertex2)
+	{
+		Iterator<Edge> inEdges = FindInEdges(vertex1);
+        while(inEdges.hasNext())
+        {  
+        	Edge edge = inEdges.next();  
+        	if(edge.Target().equals(vertex2))
+        	{
+        		RemoveEdge(edge);
+        	}
+        }
+
+		Iterator<Edge> outEdges = FindOutEdges(vertex1);
+        while(outEdges.hasNext())
+        {  
+        	Edge edge = outEdges.next();  
+        	if(edge.Source().Id() == vertex2.Id())
+        	{
+        		RemoveEdge(edge);
+        	}
+        }
+	}
 
 
 	public Iterator<Edge> FindInEdges(GeoEntity vertex) 

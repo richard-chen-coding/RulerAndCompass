@@ -53,25 +53,7 @@ public abstract class GeoEntity
 	protected final void RemoveIntersections(GeoEntity entity)
 	{
 		Graph graph = Graph.GetGraph();
-		Iterator<Edge> inEdges = graph.FindInEdges(this);
-        while(inEdges.hasNext())
-        {  
-        	Edge edge = inEdges.next();  
-        	if(edge.Target().Id() == entity.Id())
-        	{
-        		graph.RemoveEdge(edge);
-        	}
-        }
-
-		Iterator<Edge> outEdges = Graph.GetGraph().FindOutEdges(this);
-        while(outEdges.hasNext())
-        {  
-        	Edge edge = outEdges.next();  
-        	if(edge.Source().Id() == entity.Id())
-        	{
-        		graph.RemoveEdge(edge);
-        	}
-        }
+		graph.RemoveEdges(this, entity);
 	}
 	
 	public abstract void CalcIntersection(GeoEntity entity);
@@ -131,6 +113,15 @@ public abstract class GeoEntity
 	protected static int _cid = 0;
 	protected int _id;	
 
+	public boolean equals(Object o)
+	{
+		GeoEntity e = (GeoEntity)o;
+		if(e != null)
+		{
+			return e.Id() == Id();
+		}
+		return false;			
+	}
 	
 	public MovingStatus Status;
 	
