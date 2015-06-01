@@ -1,15 +1,75 @@
 package com.rich.edu.rulerandcompass.geo;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
 public class Util 
 {
+	public final static double M_2PI 	= Math.PI * 2;
+	
 	public static float Length(Point2D start, Point2D end)
 	{
 		return (float) Math.hypot((start.X - end.X), (start.Y - end.Y));
 	}
+	
+	public static float horizontalAngle(Point2D p1, Point2D p2) 
+	{
+		return (float)((Math.atan2(p2.Y - p1.Y, p2.X - p1.X) + M_2PI) % (M_2PI));
+	}
+	
+	public static Collection<Point2D> get_circle_circle_intersections(Point2D c1_center, float c1_radius, Point2D c2_center, float c2_radius)
+	{
+        ArrayList<Point2D> intersections = new ArrayList<Point2D>(2);
+        
+        float d = Length(c1_center, c2_center);
+        
+		if (d < Math.abs(c1_radius - c2_radius) || d > (c1_radius + c2_radius))
+		{
+			return intersections;
+		}
+		
+		float angle = horizontalAngle(c1_center, c2_center);
+		
+		float d1 = d / 2 + (c1_radius * c1_radius - c2_radius * c2_radius) / (2 * d);
+		
+		Point2D tmp = Point2D.createPolar(c1_center, d1, angle);
+		
+		float h = (float)Math.sqrt(c1_radius * c1_radius - d1 * d1);
+		
+		intersections.add(Point2D.createPolar(tmp, h, (float)(angle + Math.PI / 2)));
+		intersections.add(Point2D.createPolar(tmp, h, (float)(angle - Math.PI / 2)));	
+		
+        return intersections;
+	}
+	
+	public static Collection<Point2D> get_circle_line_intersections(Point2D center, float radius, Point2D line_start, Point2D line_end)
+	{
+        ArrayList<Point2D> intersections = new ArrayList<Point2D>();
+
+			
+		//TODO
+		
+		
+        return intersections;
+	}
+	
+	
+	public static Point2D get_line_line_intersections(Point2D start1, Point2D end1, Point2D start2, Point2D end2)
+	{
+		Point2D pt = null;
+
+			
+		//TODO
+		
+		
+        return pt;
+	}
+	
+	
 
 	public static Point2D get_line_intersection(float p0_x, float p0_y, float p1_x, float p1_y, 
 		    float p2_x, float p2_y, float p3_x, float p3_y)
@@ -66,6 +126,8 @@ public class Util
 		_hintPaint.setStyle(Paint.Style.STROKE);
 	}
 	
+	public static int ScreenWidth;
+	public static int ScreenHeight;
 	private static boolean _isInited = false;
 	private static Paint _intersectionPaint;
 	private static int _intersectionRadius;

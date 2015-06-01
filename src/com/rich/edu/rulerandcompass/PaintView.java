@@ -2,6 +2,7 @@ package com.rich.edu.rulerandcompass;
 
 import java.util.ArrayList;
 
+import com.rich.edu.rulerandcompass.drawable.IDrawable;
 import com.rich.edu.rulerandcompass.geo.GeoEntity;
 import com.rich.edu.rulerandcompass.geo.Segment;
 import com.rich.edu.rulerandcompass.geo.Util;
@@ -23,7 +24,12 @@ public class PaintView  extends View
     {
     	for(GeoEntity e : drewEntities)
     	{
-    		e.Draw(canvas, _paint);
+    		IDrawable obj = (IDrawable)e;
+    		if(obj != null)
+    		{
+    			obj.Draw(canvas, _paint);
+    		}
+    		
     		if(curEntity != null)
     		{
     			e.CalcIntersection(curEntity);
@@ -32,7 +38,11 @@ public class PaintView  extends View
     	
     	if(curEntity != null)
     	{
-    		curEntity.Draw(canvas, _paint);
+    		IDrawable obj = (IDrawable)curEntity;
+    		if(obj != null)
+    		{
+    			obj.Draw(canvas, _paint);
+    		}
     	}
     }
 	
@@ -102,6 +112,8 @@ public class PaintView  extends View
         if (curW < w) curW = w;
         if (curH < h) curH = h;
 
+        Util.ScreenHeight = curH;
+        Util.ScreenWidth = curW;
         Bitmap newBitmap = Bitmap.createBitmap(curW, curH, Bitmap.Config.ARGB_8888);
         
 

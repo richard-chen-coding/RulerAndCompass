@@ -1,14 +1,8 @@
 package com.rich.edu.rulerandcompass.geo;
 
-import java.util.Iterator;
-
-import com.rich.edu.rulerandcompass.algo.Edge;
 import com.rich.edu.rulerandcompass.algo.Graph;
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-
-public abstract class GeoEntity 
+public abstract class GeoEntity
 {	
 	public GeoEntity(Point2D start, Point2D end)
 	{
@@ -26,29 +20,6 @@ public abstract class GeoEntity
 	{
 		this(new Point2D(start_x, start_y), new Point2D(end_x, end_y));
 	}
-	
-	
-	protected final void DrawIntersectionPoints(Canvas canvas)
-	{
-		Graph graph = Graph.GetGraph();
-		Iterator<Edge> edges = graph.FindEdges(this);
-        while(edges.hasNext())
-        {  
-        	Edge edge = edges.next();  
-        	for(Point2D pt : edge.IntersectionPoints)
-        	{
-        		Util.DrawIntersectionPoint(canvas, pt);
-        	}
-        }
-	}
-	
-	public void Draw(Canvas canvas, Paint paint)
-	{
-		DrawIntersectionPoints(canvas);
-
-		DrawHintPoints(canvas, paint);
-	}
-	
 
 	protected final void RemoveIntersections(GeoEntity entity)
 	{
@@ -67,10 +38,10 @@ public abstract class GeoEntity
 		Status = MovingStatus.Moving;
 	}
 	
-	public abstract void DrawMovingHintPoints(Canvas canvas, Paint paint);
-	public abstract void DrawFinalHintPoints(Canvas canvas, Paint paint);
+
 	public abstract void OnFinishMoving();
 	
+
 	public final int Id()
 	{
 		return _id;	
@@ -92,22 +63,6 @@ public abstract class GeoEntity
 		OnFinishMoving();
 	}
 	
-
-		
-
-	
-	private void DrawHintPoints(Canvas canvas, Paint paint)
-	{
-		if(Status == MovingStatus.Moving)
-		{
-			DrawMovingHintPoints(canvas, paint);
-		}
-		else if(Status == MovingStatus.Done)
-		{
-			DrawFinalHintPoints(canvas, paint);
-		}
-	}
-		
 	protected Point2D _start;
 	protected Point2D _end;
 	protected static int _cid = 0;

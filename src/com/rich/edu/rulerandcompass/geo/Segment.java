@@ -1,12 +1,11 @@
 package com.rich.edu.rulerandcompass.geo;
 
+import java.util.Collection;
+
 import com.rich.edu.rulerandcompass.algo.Edge;
 import com.rich.edu.rulerandcompass.algo.Graph;
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-
-public class Segment  extends LineBase
+public class Segment  extends LineBase 
 {
 	public Segment(float start_x, float start_y, float end_x, float end_y) 
 	{
@@ -34,18 +33,22 @@ public class Segment  extends LineBase
 				Graph.GetGraph().AddEdge(edge);
 			}
 		}
+		else if(entity instanceof Circle)
+		{
+			Circle circle = (Circle)entity;
+			Collection<Point2D> pts = Util.get_circle_line_intersections(circle.Center(), circle.Radius(), Start(), End());
+			for(Point2D pt : pts)
+			{
+				Edge edge = new Edge(this, entity, new Point2D[]{pt});
+				Graph.GetGraph().AddEdge(edge);
+			}
+		}
 		else
 		{
 			 throw new IllegalArgumentException("Unsupported GeoEntity Type");
 		}
 	}
 
-	@Override
-	public void DrawFinalHintPoints(Canvas canvas, Paint paint) 
-	{
-		Util.DrawHintPoint(canvas, _start);
-		Util.DrawHintPoint(canvas, _end);
-	}
 	
 	@Override
 	public void OnFinishMoving() 

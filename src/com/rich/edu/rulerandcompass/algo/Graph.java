@@ -1,8 +1,8 @@
 package com.rich.edu.rulerandcompass.algo;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -127,54 +127,52 @@ public class Graph
 		 GeoEntity source = tmpEdge.Source();
 		 GeoEntity target = tmpEdge.Target();
 
+		 Collection<Edge> inEdges = FindInEdges(source);
+		 for(Edge edge : inEdges)
+		 {
+			 if(edge.Target().equals(target))
+			 {
+				 RemoveEdge(edge);
+		     }
+		 }
 		 
-		Iterator<Edge> inEdges = FindInEdges(source);
-        while(inEdges.hasNext())
-        {  
-        	Edge edge = inEdges.next();  
-        	if(edge.Target().equals(target))
-        	{
-        		RemoveEdge(edge);
-        	}
-        }
-
-		Iterator<Edge> outEdges = FindOutEdges(target);
-        while(outEdges.hasNext())
-        {  
-        	Edge edge = outEdges.next();  
+        Collection<Edge> outEdges = FindOutEdges(target);
+        for(Edge edge : outEdges)
+        {
         	if(edge.Source().equals(source))
         	{
         		RemoveEdge(edge);
         	}
         }
+
 	}
 
 
-	public Iterator<Edge> FindInEdges(GeoEntity vertex) 
+	public Collection<Edge> FindInEdges(GeoEntity vertex) 
 	{
 		if(_inEdgeMap.containsKey(vertex))
 		{
-			return _inEdgeMap.get(vertex).iterator();
+			return _inEdgeMap.get(vertex);
 		}
 		else
 		{
-			return (new ArrayList<Edge>()).iterator();
+			return (new ArrayList<Edge>());
 		}
 	}
 	
-	public Iterator<Edge> FindOutEdges(GeoEntity vertex) 
+	public Collection<Edge> FindOutEdges(GeoEntity vertex) 
 	{
 		if(_outEdgeMap.containsKey(vertex))
 		{
-			return _outEdgeMap.get(vertex).iterator();
+			return _outEdgeMap.get(vertex);
 		}
 		else
 		{
-			return (new ArrayList<Edge>()).iterator();
+			return (new ArrayList<Edge>());
 		}
 	}
 
-	public Iterator<Edge> FindEdges(GeoEntity vertex) 
+	public Collection<Edge> FindEdges(GeoEntity vertex) 
 	{
 		List<Edge> edges = new ArrayList<Edge>();
 		
@@ -187,7 +185,7 @@ public class Graph
 			edges.addAll(_outEdgeMap.get(vertex));
 		}
 		
-		return edges.iterator();
+		return edges;
 	}
 
 }

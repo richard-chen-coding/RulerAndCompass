@@ -1,20 +1,32 @@
 package com.rich.edu.rulerandcompass.geo;
 
+import java.util.Collection;
+
+import com.rich.edu.rulerandcompass.algo.Edge;
+import com.rich.edu.rulerandcompass.algo.Graph;
+import com.rich.edu.rulerandcompass.drawable.IDrawable;
+
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-public abstract class LineBase extends GeoEntity
+public abstract class LineBase extends GeoEntity implements IDrawable
 {
 	public LineBase(float start_x, float start_y, float end_x, float end_y) 
 	{
 		super(start_x, start_y, end_x, end_y);
-		_slope = Math.abs((start_y - end_y) / (start_x - end_x));
-	}
+		_slope = CalcSlope(start_x, start_y, end_x, end_y);
+ 	}
 	
 	public LineBase(Point2D start, Point2D end) 
 	{
 		super(start, end);
-		_slope = Math.abs((start.Y - end.Y) / (start.X - end.X));
+		_slope = CalcSlope(start.X, start.Y, end.X, end.Y);
+	}
+	
+	protected float CalcSlope(float start_x, float start_y, float end_x, float end_y)
+	{
+		return (start_x - end_y) / (start_x - end_x);
+		//return Math.abs((start_x - end_y) / (start_x - end_x));
 	}
 	
 
@@ -36,12 +48,26 @@ public abstract class LineBase extends GeoEntity
 	
 	public void Draw(Canvas canvas, Paint paint)
 	{
-		super.Draw(canvas, paint);
+		DrawIntersectionPoints(canvas);
+		DrawHintPoints(canvas);
 		canvas.drawLine(_start.X, _start.Y, _end.X, _end.Y, paint);
 	}
 	
-	@Override
-	public void DrawMovingHintPoints(Canvas canvas, Paint paint) 
+
+	public void DrawIntersectionPoints(Canvas canvas)
+	{
+		Graph graph = Graph.GetGraph();
+		Collection<Edge> edges = graph.FindEdges(this);
+		for(Edge edge : edges)
+		{
+        	for(Point2D pt : edge.IntersectionPoints)
+        	{
+        		Util.DrawIntersectionPoint(canvas, pt);
+        	}
+		}
+	}
+	
+	public void DrawHintPoints(Canvas canvas) 
 	{
 		Util.DrawHintPoint(canvas, _start);
 		Util.DrawHintPoint(canvas, _end);
