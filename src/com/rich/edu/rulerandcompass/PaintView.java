@@ -2,11 +2,13 @@ package com.rich.edu.rulerandcompass;
 
 import java.util.ArrayList;
 
+import com.rich.edu.rulerandcompass.drawable.DrawUtil;
 import com.rich.edu.rulerandcompass.drawable.IDrawable;
 import com.rich.edu.rulerandcompass.geo.GeoEntity;
 import com.rich.edu.rulerandcompass.geo.Segment;
-import com.rich.edu.rulerandcompass.geo.Util;
+import com.rich.edu.rulerandcompass.geo.GeoUtil;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -48,6 +50,7 @@ public class PaintView  extends View
 	
 	
 	
+
 
 	public boolean onTouchEvent(MotionEvent event)
 	{
@@ -112,8 +115,8 @@ public class PaintView  extends View
         if (curW < w) curW = w;
         if (curH < h) curH = h;
 
-        Util.ScreenHeight = curH;
-        Util.ScreenWidth = curW;
+        DrawUtil.ScreenHeight = curH;
+        DrawUtil.ScreenWidth = curW;
         Bitmap newBitmap = Bitmap.createBitmap(curW, curH, Bitmap.Config.ARGB_8888);
         
 
@@ -144,7 +147,8 @@ public class PaintView  extends View
     {
         setFocusable(true);
 
-        Util.Init();
+        GeoUtil.Init();
+        DrawUtil.Init();
         _paint.setAntiAlias(true);
         _paint.setColor(Color.RED);
         _paint.setStrokeWidth(1);

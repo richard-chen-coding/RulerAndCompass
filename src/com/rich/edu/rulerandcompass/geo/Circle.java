@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import com.rich.edu.rulerandcompass.algo.Edge;
 import com.rich.edu.rulerandcompass.algo.Graph;
+import com.rich.edu.rulerandcompass.drawable.DrawUtil;
 import com.rich.edu.rulerandcompass.drawable.IDrawable;
 
 import android.graphics.Canvas;
@@ -29,7 +30,7 @@ public class Circle extends GeoEntity  implements IDrawable
 	
 	public float Radius()
 	{
-		return Util.Length(Start(), End());
+		return GeoUtil.Length(Start(), End());
 	}
 	
 	@Override
@@ -40,7 +41,7 @@ public class Circle extends GeoEntity  implements IDrawable
 		if(entity instanceof Segment)
 		{
 			Segment line = (Segment)entity;
-			Collection<Point2D> pts = Util.get_circle_line_intersections(Center(), Radius(), line.Start(), line.End());
+			Collection<Point2D> pts = GeoUtil.get_circle_line_intersections(Center(), Radius(), line.Start(), line.End());
 			for(Point2D pt : pts)
 			{
 				Edge edge = new Edge(this, entity, new Point2D[]{pt});
@@ -50,7 +51,7 @@ public class Circle extends GeoEntity  implements IDrawable
 		else if(entity instanceof Circle)
 		{
 			Circle circle = (Circle)entity;
-			Collection<Point2D> pts = Util.get_circle_circle_intersections(Center(), Radius(), circle.Center(), circle.Radius());
+			Collection<Point2D> pts = GeoUtil.get_circle_circle_intersections(Center(), Radius(), circle.Center(), circle.Radius());
 			for(Point2D pt : pts)
 			{
 				Edge edge = new Edge(this, entity, new Point2D[]{pt});
@@ -80,7 +81,7 @@ public class Circle extends GeoEntity  implements IDrawable
 	
 	public void DrawHintPoints(Canvas canvas) 
 	{
-		Util.DrawHintPoint(canvas, Center());
+		DrawUtil.DrawHintPoint(canvas, Center());
 	}
 	
 
@@ -92,7 +93,7 @@ public class Circle extends GeoEntity  implements IDrawable
 		{
         	for(Point2D pt : edge.IntersectionPoints)
         	{
-        		Util.DrawIntersectionPoint(canvas, pt);
+        		DrawUtil.DrawIntersectionPoint(canvas, pt);
         	}
 		}
 	}

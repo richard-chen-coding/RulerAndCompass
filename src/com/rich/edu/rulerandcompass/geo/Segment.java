@@ -26,7 +26,7 @@ public class Segment  extends LineBase
 		if(entity instanceof Segment)
 		{
 			Segment line = (Segment)entity;
-			Point2D pt = Util.get_line_intersection(Start().X, Start().Y, End().X, End().Y, line.Start().X, line.Start().Y, line.End().X, line.End().Y);
+			Point2D pt = GeoUtil.get_line_intersection(Start().X, Start().Y, End().X, End().Y, line.Start().X, line.Start().Y, line.End().X, line.End().Y);
 			if(pt != null)
 			{
 				Edge edge = new Edge(this, entity, new Point2D[]{pt});
@@ -36,7 +36,7 @@ public class Segment  extends LineBase
 		else if(entity instanceof Circle)
 		{
 			Circle circle = (Circle)entity;
-			Collection<Point2D> pts = Util.get_circle_line_intersections(circle.Center(), circle.Radius(), Start(), End());
+			Collection<Point2D> pts = GeoUtil.get_circle_line_intersections(circle.Center(), circle.Radius(), Start(), End());
 			for(Point2D pt : pts)
 			{
 				Edge edge = new Edge(this, entity, new Point2D[]{pt});

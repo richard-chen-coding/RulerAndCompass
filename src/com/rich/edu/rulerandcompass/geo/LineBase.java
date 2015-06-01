@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import com.rich.edu.rulerandcompass.algo.Edge;
 import com.rich.edu.rulerandcompass.algo.Graph;
+import com.rich.edu.rulerandcompass.drawable.DrawUtil;
 import com.rich.edu.rulerandcompass.drawable.IDrawable;
 
 import android.graphics.Canvas;
@@ -62,15 +63,15 @@ public abstract class LineBase extends GeoEntity implements IDrawable
 		{
         	for(Point2D pt : edge.IntersectionPoints)
         	{
-        		Util.DrawIntersectionPoint(canvas, pt);
+        		DrawUtil.DrawIntersectionPoint(canvas, pt);
         	}
 		}
 	}
 	
 	public void DrawHintPoints(Canvas canvas) 
 	{
-		Util.DrawHintPoint(canvas, _start);
-		Util.DrawHintPoint(canvas, _end);
+		DrawUtil.DrawHintPoint(canvas, _start);
+		DrawUtil.DrawHintPoint(canvas, _end);
 	}
 	
 	protected float _slope;
