@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.rich.edu.rulerandcompass.drawable.DrawUtil;
 import com.rich.edu.rulerandcompass.drawable.IDrawable;
+import com.rich.edu.rulerandcompass.geo.Circle;
 import com.rich.edu.rulerandcompass.geo.GeoEntity;
 import com.rich.edu.rulerandcompass.geo.Segment;
 import com.rich.edu.rulerandcompass.geo.GeoUtil;
@@ -100,7 +101,7 @@ public class PaintView  extends View
     //only a temp helper creater
     private GeoEntity createEntity(float s_x, float s_y, float e_x, float e_y)
     {
-    	return new Segment(s_x, s_y, e_x, e_y);
+    	return new Circle(s_x, s_y, e_x, e_y);
     }
     
     @Override

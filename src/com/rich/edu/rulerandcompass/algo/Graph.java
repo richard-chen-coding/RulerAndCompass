@@ -3,6 +3,7 @@ package com.rich.edu.rulerandcompass.algo;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -127,12 +128,15 @@ public class Graph
 		 GeoEntity source = tmpEdge.Source();
 		 GeoEntity target = tmpEdge.Target();
 
-		 Collection<Edge> inEdges = FindInEdges(source);
+		 List<Edge> edgesToBeRemoved = new ArrayList<Edge>();
+		 
+		 Collection<Edge> inEdges = FindInEdges(source);		 
 		 for(Edge edge : inEdges)
 		 {
 			 if(edge.Target().equals(target))
 			 {
-				 RemoveEdge(edge);
+				 edgesToBeRemoved.add(edge);
+				 //RemoveEdge(edge);
 		     }
 		 }
 		 
@@ -141,8 +145,14 @@ public class Graph
         {
         	if(edge.Source().equals(source))
         	{
-        		RemoveEdge(edge);
+        		edgesToBeRemoved.add(edge);
+        		//RemoveEdge(edge);
         	}
+        }
+        
+        for(Edge edge : edgesToBeRemoved)
+        {
+        	RemoveEdge(edge);
         }
 
 	}
